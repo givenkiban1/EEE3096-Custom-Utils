@@ -6,7 +6,7 @@ import subprocess
 resp = []
 
 
-def updateDataType(old, new, threaded=False):
+def updateDataType(old="", new="", threaded=False):
 
     print("Running updateDataType")
 
@@ -61,7 +61,19 @@ def updateDataType(old, new, threaded=False):
             f.write(content)
             f.close()
 
-        
+    elif (threaded):
+        content = ""
+
+        with open("src/CHeterodyning_threaded.h", "r") as f:
+            content = f.readlines()
+            f.close()
+
+        content[14] = "#define Thread_Count " + new
+
+        with open("src/CHeterodyning_threaded.h", "w") as f:
+            f.writelines(content)
+            f.close()
+
 
 
 
@@ -84,21 +96,29 @@ if (len(sys.argv) in [4,5]):
 
             command = "make"
 
-            additional = "run"
+            additional = "make run"
 
             if (sys.argv.count("-t")>0):
-                additional = "threaded"
+                command = "make threaded"
+                additional = "make run_threaded"
 
             #if the params above are valid, we now begin to loop n times, running the file at each iteration
             
-            data_types = ["double", "__fp16", "float"]
-
-            past = "float"
+            data_types = []
+            if additional=="threaded":
+                print("Running threaded version")
+                data_types = ["2", "4", "8", "16", "32", "1"]
+                past = "1"
+            else:
+                print("Running Non-threaded")
+                data_types = ["double", "__fp16", "float"]
+                past = "float"
 
             count = 0
 
-            for i in range(3):
-                updateDataType(past, data_types[i])
+            for i in range(len(data_types)):
+                tr = additional=="make run_threaded"
+                updateDataType(past, data_types[i], threaded=tr)
 
                 for o in range(n):
 
@@ -114,7 +134,7 @@ if (len(sys.argv) in [4,5]):
 
                     #run the compiled file
 
-                    res = command + " " + additional
+                    res = additional
                     res = subprocess.getoutput(res)
 
                     # clear console
@@ -123,14 +143,22 @@ if (len(sys.argv) in [4,5]):
 
                     #parsing the elapsed time data
                     res = res[res.index("Time: ") : ]
-                    
+
                     # Time: 211.642441 ms
                     res = res.split(" ")
-                    
+
+                    # if not threaded
                     # [Time:, 211.642441, ms]
                     #parsing hours, minutes and seconds
-                    s = float( res[1] )
+
+                    if additional=="make run":
+                        s = float( res[1] )
                     
+                    #if threaded
+                    # Time taken for threads to run = 16.2098 ms
+                    elif additional=="make run_threaded":
+                        s = float( res[7] )
+
                     #converting the above time to seconds and storing it in resp array
                     resp.append(s)
 
@@ -149,7 +177,7 @@ if (len(sys.argv) in [4,5]):
                 summ += resp[i]
 
             #using calculated sum to get average elapsed time in seconds
-            avg = summ/float(n)
+            avg = summ/float(count)
 
             print("\n"*3)
             print("="*50)

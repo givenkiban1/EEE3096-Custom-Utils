@@ -7,20 +7,25 @@ resp = []
 
 #for this program to run, user has to write the following
 #python3 runfiles.py -f <filename.extension> -n <number of times to run filename.extension>
+#OR
+#python3 runfiles.py -n <no. of times to run these files> -c [-t] 
 #this is why we always expect to have 5 parameters, counted after the python3 keyword
-if (len(sys.argv) == 5 ):
+if (len(sys.argv) == 5):
 
     #next we check that both -f and -n arguments are passed
     if (sys.argv.count("-f")>0 and sys.argv.count("-n")>0):
+
         try:
             
             #here, we try parsing the arguments, hence using the try catch block
             f = sys.argv[sys.argv.index("-f")+1]
             n = int(sys.argv[sys.argv.index("-n")+1])
 
+            command = "python3 "
+
             #if the params above are valid, we now begin to loop n times, running the file at each iteration
             for i in range(n):
-                res = "python3 "+f
+                res = command+f
                 res = subprocess.getoutput(res)
                     
                 #parsing the elapsed time data
@@ -46,8 +51,6 @@ if (len(sys.argv) == 5 ):
             #using calculated sum to get average elapsed time in seconds
             avg = summ/float(n)
 
-
-            
             print("\n"*3)
             print("="*50)
 

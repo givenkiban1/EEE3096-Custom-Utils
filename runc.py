@@ -8,6 +8,8 @@ resp = []
 
 def updateDataType(old, new, threaded=False):
 
+    print("Running updateDataType")
+
     if (threaded==False):
 
         content = ""
@@ -96,12 +98,12 @@ if (len(sys.argv) in [4,5]):
             count = 0
 
             for i in range(3):
-
                 updateDataType(past, data_types[i])
 
                 for o in range(n):
 
                     count+=1
+                    print(count)
                     
                     # make file
                     res = command
@@ -124,6 +126,8 @@ if (len(sys.argv) in [4,5]):
                     
                     #converting the above time to seconds and storing it in resp array
                     resp.append(s)
+
+                    print("done ...")
 
                 
                 past = data_types[i]

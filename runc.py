@@ -105,7 +105,7 @@ if (len(sys.argv) in [4,5]):
             #if the params above are valid, we now begin to loop n times, running the file at each iteration
             
             data_types = []
-            if additional=="threaded":
+            if additional=="make run_threaded":
                 print("Running threaded version")
                 data_types = ["2", "4", "8", "16", "32", "1"]
                 past = "1"

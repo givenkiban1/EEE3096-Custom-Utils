@@ -109,10 +109,17 @@ if (len(sys.argv) in [4,5]):
                     res = command
                     res = subprocess.getoutput(res)
 
+                    # clear console
+                    subprocess.getoutput("clear")
+
                     #run the compiled file
 
                     res = command + " " + additional
                     res = subprocess.getoutput(res)
+
+                    # clear console
+                    subprocess.getoutput("clear")
+
 
                     #parsing the elapsed time data
                     res = res[res.index("Time: ") : ]

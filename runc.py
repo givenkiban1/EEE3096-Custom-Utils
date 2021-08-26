@@ -142,7 +142,7 @@ if (len(sys.argv) in [4,5]):
 
 
                     #parsing the elapsed time data
-                    res = res[res.index("Time: ") : ]
+                    res = res[res.index("Time") : ]
 
                     # Time: 211.642441 ms
                     res = res.split(" ")

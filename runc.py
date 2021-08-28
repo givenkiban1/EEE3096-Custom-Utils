@@ -80,7 +80,7 @@ def updateDataType(old="", new="", threaded=False):
 
 
 #for this program to run, user has to write the following
-#python3 runfiles.py -n <no. of times to run these files> -c [-t] 
+#python3 runc.py -n <no. of times to run these files> -c [-t] 
 #this is why we always expect to have 5 parameters, counted after the python3 keyword
 if (len(sys.argv) in [4,5]):
 

@@ -179,7 +179,7 @@ if (len(sys.argv) in [4,5]):
                 print("Elapsed time for run %d = %fms" % (i+1, resp[i]))
                 if ((i+1) % n)==0:
                     miniSum += resp[i]
-                    t_type+=1
+                    t_ype+=1
                     print("\n---------- Average Time for the Above (%s) ----------\n" %(data_types[t_ype]))
                     print("=%fms\n\n" % (miniSum/n))
                     miniSum = 0

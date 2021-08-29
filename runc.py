@@ -27,7 +27,7 @@ def updateDataType(old="", new="", threaded=False, compilerFlags=False, cflag=""
         flags.append(cflag)
 
     c = " -".join(flags)
-    c = "CFLAGS = -"+ c
+    c = "CFLAGS = -"+ c + "\n"
     
 
     # simply changing bit widths
@@ -266,10 +266,12 @@ elif (len(sys.argv) in [3,4,5]):
 
                         
                         past = data_types[i]
-                    c_times.append({
-                        "resp": resp,
-                        "c_flag": c_flags[c]
-                    })
+                    # c_times.append({
+                    #     "resp": resp,
+                    #     "c_flag": c_flags[c]
+                    # })
+
+                    printContent(resp, c_flags[c])
 
                     resp=[]
             else:
@@ -326,10 +328,7 @@ elif (len(sys.argv) in [3,4,5]):
                     past = data_types[i]
 
             
-            if compiler_flags:
-                for cf in c_times:
-                    printContent(cf["resp"], cf["c_flag"])
-            else:
+            if compiler_flags==False:
                 printContent(resp)
 
             print("Done")

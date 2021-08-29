@@ -285,7 +285,8 @@ elif (len(sys.argv) in [3,4,5]):
 
             print("Done")
         except Exception as e:
-            print(e)
+            printError(e)
+
             print("invalid arguments. make sure that -f is a valid file and -n is an integer")
     
     else:
@@ -293,6 +294,22 @@ elif (len(sys.argv) in [3,4,5]):
 else:
     print("invalid number of arguments")
 
+
+def printError(e):
+    trace = []
+    tb = e.__traceback__
+    while tb is not None:
+        trace.append({
+            "filename": tb.tb_frame.f_code.co_filename,
+            "name": tb.tb_frame.f_code.co_name,
+            "lineno": tb.tb_lineno
+        })
+        tb = tb.tb_next
+    print(str({
+        'type': type(e).__name__,
+        'message': str(e),
+        'trace': trace
+    }))
 
 def printContent(nResp, flags=""):
     avg = 0

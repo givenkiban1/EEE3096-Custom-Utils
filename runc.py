@@ -101,7 +101,54 @@ def updateDataType(old="", new="", threaded=False, compilerFlags=False, cflag=""
 
 
 
+def printError(e):
+    trace = []
+    tb = e.__traceback__
+    while tb is not None:
+        trace.append({
+            "filename": tb.tb_frame.f_code.co_filename,
+            "name": tb.tb_frame.f_code.co_name,
+            "lineno": tb.tb_lineno
+        })
+        tb = tb.tb_next
+    print(str({
+        'type': type(e).__name__,
+        'message': str(e),
+        'trace': trace
+    }))
 
+def printContent(nResp, flags=""):
+    avg = 0
+    summ = 0
+    
+    miniSum = 0
+    t_ype = -1
+
+    if (flags!=""):
+        print("The following flag was used in this run: "+ flags)
+
+    count = len(nResp)
+
+    #looping to sum the elapsed times
+    for i in range(count):
+        print("Elapsed time for run %d = %fms" % (i+1, nResp[i]))
+        if ((i+1) % n)==0:
+            miniSum += nResp[i]
+            t_ype+=1
+            print("\n---------- Average Time for the Above (%s) ----------\n" %(data_types[t_ype]))
+            print("=%fms\n\n" % (miniSum/n))
+            miniSum = 0
+        else:
+            miniSum+= nResp[i]
+        summ += resp[i]
+
+    #using calculated sum to get average elapsed time in seconds
+    avg = summ/float(count)
+
+    print("\n"*3)
+    print("="*50)
+
+    print("Average time taken = %f ms" % avg)
 
 
 #for this program to run, user has to write the following
@@ -223,6 +270,8 @@ elif (len(sys.argv) in [3,4,5]):
                         "resp": resp,
                         "c_flag": c_flags[c]
                     })
+
+                    resp=[]
             else:
                 for i in range(len(data_types)):
                     tr = additional=="make run_threaded"
@@ -295,54 +344,9 @@ else:
     print("invalid number of arguments")
 
 
-def printError(e):
-    trace = []
-    tb = e.__traceback__
-    while tb is not None:
-        trace.append({
-            "filename": tb.tb_frame.f_code.co_filename,
-            "name": tb.tb_frame.f_code.co_name,
-            "lineno": tb.tb_lineno
-        })
-        tb = tb.tb_next
-    print(str({
-        'type': type(e).__name__,
-        'message': str(e),
-        'trace': trace
-    }))
-
-def printContent(nResp, flags=""):
-    avg = 0
-    summ = 0
-    
-    miniSum = 0
-    t_ype = -1
-
-    if (flags!=""):
-        print("The following flag was used in this run: "+ flags)
-
-    count = len(nResp)
-
-    #looping to sum the elapsed times
-    for i in range(count):
-        print("Elapsed time for run %d = %fms" % (i+1, nResp[i]))
-        if ((i+1) % n)==0:
-            miniSum += nResp[i]
-            t_ype+=1
-            print("\n---------- Average Time for the Above (%s) ----------\n" %(data_types[t_ype]))
-            print("=%fms\n\n" % (miniSum/n))
-            miniSum = 0
-        else:
-            miniSum+= nResp[i]
-        summ += resp[i]
-
-    #using calculated sum to get average elapsed time in seconds
-    avg = summ/float(count)
-
-    print("\n"*3)
-    print("="*50)
-
-    print("Average time taken = %f ms" % avg)
-
 exit(0)
 
+
+# best command for lazy persons
+
+# cd ../../../EEE3096-Custom-Utils/ && git pull origin master && cd ../EEE3096S-2021/WorkPackage2/C && cp ../../../EEE3096-Custom-Utils/runc.py .

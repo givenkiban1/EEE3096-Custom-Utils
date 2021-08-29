@@ -170,10 +170,19 @@ if (len(sys.argv) in [4,5]):
             
             avg = 0
             summ = 0
+            
+            miniSum = 0
 
             #looping to sum the elapsed times
             for i in range(count):
                 print("Elapsed time for run %d = %fms" % (i+1, resp[i]))
+                if (i+1 % n)==0:
+                    miniSum += resp[i]
+                    print("\n---------- Average Time for the Above ----------\n")
+                    print("=%fms\n\n" % (miniSum/n))
+                    miniSum = 0
+                else:
+                    miniSum+= resp[i]
                 summ += resp[i]
 
             #using calculated sum to get average elapsed time in seconds

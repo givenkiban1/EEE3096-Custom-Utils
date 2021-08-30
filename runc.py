@@ -163,9 +163,10 @@ if (sys.argv.count("-h")):
     print(o)
     print("="*len(o))
     print("Some useful information you should know:\n")
-    print("python3 runc.py -n <no. of times to run these files> [-c] [-t]")
+    print("python3 runc.py -n <no. of times to run these files> [-c] [-t] [-cfc]")
     print("-c means implement compiler flags. c can be used in combination with '-t'")
     print("-t means implement threading")
+    print("-cfc means compiler flags combined. NB: you can't have both cfc and c in the same command.")
     print("-n means no of times to iterate a certain variable. this is always required")
     print("\nEnjoy your day.")
 
@@ -192,9 +193,17 @@ elif (len(sys.argv) in [3,4,5]):
                 command = "make threaded"
                 additional = "make run_threaded"
 
+            combine_cflags =False
+
             if (sys.argv.count("-c")>0):
                 compiler_flags = True
-                print("compiler flags in the building!")                
+                print("compiler flags in the building!")    
+            elif (sys.argv.count("-cfc")>0):
+                compiler_flags = True
+                combine_cflags = True
+
+                print("combining compiler flags bro!")
+
 
             #if the params above are valid, we now begin to loop n times, running the file at each iteration
             
@@ -207,8 +216,11 @@ elif (len(sys.argv) in [3,4,5]):
                 print("Running Non-threaded")
                 data_types = ["double", "__fp16", "float"]
                 past = "float"
-
-            c_flags = ["O0", "O1","O2", "O3", "Ofast", "Os", "Og", "funroll-loops"]
+                
+            if combine_cflags==False:
+                c_flags = ["O0", "O1","O2", "O3", "Ofast", "Os", "Og", "funroll-loops"]
+            else:
+                c_flags = ["O1 -funroll-loops","O2 -funroll-loops", "O3 -funroll-loops", "Ofast -funroll-loops"]
 
             count = 0
             c_times = []
